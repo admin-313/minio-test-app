@@ -37,7 +37,7 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
         else:
             return False, f"Bucket {bucket_name} doesn't exist"
 
-    def get_object(self, object_id: int) -> None:
+    def get_object(self, bucket_name: str, object_name: str) -> None:
         pass
 
     def put_object(

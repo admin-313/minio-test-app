@@ -9,7 +9,7 @@ class DatabaseDriver(ABC):
         pass
 
     @abstractmethod
-    def get_object(self, object_id: int) -> None:
+    def get_object(self, bucket_name: str, object_name: str) -> None:
         pass
 
     @abstractmethod
