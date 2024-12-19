@@ -1,11 +1,12 @@
 import os
+from minio import Minio
+from dotenv import load_dotenv
+from urllib3 import BaseHTTPResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
-from minio import Minio
-from urllib3 import BaseHTTPResponse
-from db.minio_database_driver_impl import MinioDatabaseDriverImpl
 from minio.datatypes import Object as MinioObject
-from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+from db.minio_database_driver_impl import MinioDatabaseDriverImpl
 
 load_dotenv()
 
@@ -24,6 +25,14 @@ if (
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 MINIO_DB = Minio(
     # CHANGE CERTIFICATE CHECK TO TRUE IN PROD!!!!
