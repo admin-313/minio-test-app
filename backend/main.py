@@ -36,11 +36,6 @@ MINIO_DB = Minio(
 minio_driver = MinioDatabaseDriverImpl(MINIO_DB)
 
 
-@app.get("/")
-async def read_root() -> dict[str, str]:
-    return {"hello": "World"}
-
-
 @app.get("/bucket/{bucket_name}/{object_name}")
 async def read_item(bucket_name: str, object_name: str) -> StreamingResponse:
     file: BaseHTTPResponse | None = minio_driver.get_object(bucket_name, object_name)
@@ -72,6 +67,6 @@ async def read_bucket(bucket_name: str, amount: int = 20) -> list[str | None]:
         raise HTTPException(status_code=500)
 
 
-@app.get("/minio")
+@app.get("/bucket/all")
 async def read_minio() -> list[str]:
     return [bucket.name for bucket in minio_driver.get_all()]
