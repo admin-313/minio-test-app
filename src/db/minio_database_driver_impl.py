@@ -1,4 +1,6 @@
 from typing import Iterator
+
+from urllib3 import BaseHTTPResponse
 from db.database_driver import DatabaseDriver
 from minio import Minio
 from minio.datatypes import Bucket
@@ -37,8 +39,18 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
         else:
             return False, f"Bucket {bucket_name} doesn't exist"
 
-    def get_object(self, bucket_name: str, object_name: str) -> None:
-        pass
+    def get_object(self, bucket_name: str, object_name: str) -> BaseHTTPResponse | None:
+        responce = None
+
+        try:
+            responce = self._minio_db.get_object(
+                bucket_name=bucket_name, object_name=object_name
+            )
+        finally:
+            if responce:
+                responce.close()
+                responce.release_conn()
+            return responce
 
     def put_object(
         self, bucket_name: str, object_name: str, object_content: bytes

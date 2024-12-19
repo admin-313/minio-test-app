@@ -1,7 +1,8 @@
 import os
 from fastapi import FastAPI, HTTPException
-from typing import Union
+from fastapi.responses import StreamingResponse
 from minio import Minio
+from urllib3 import BaseHTTPResponse
 from db.minio_database_driver_impl import MinioDatabaseDriverImpl
 from minio.datatypes import Object as MinioObject
 from dotenv import load_dotenv
@@ -40,11 +41,20 @@ async def read_root() -> dict[str, str]:
     return {"hello": "World"}
 
 
-@app.get("/items/{item_id}")
-async def read_item(
-    item_id: int, q: Union[str, None] = None
-) -> dict[str, int | str | None]:
-    return {"item_id": item_id, "q": q}
+@app.get("/bucket/{bucket_name}/{object_name}")
+async def read_item(bucket_name: str, object_name: str) -> StreamingResponse:
+    file: BaseHTTPResponse | None = minio_driver.get_object(bucket_name, object_name)
+
+    if file:
+        return StreamingResponse(
+            content=file,
+            media_type="application/octet-stream",
+            headers={"Content-Disposition": f"attachment; filename={object_name}"},
+        )
+    else:
+        raise HTTPException(
+            status_code=404, detail=f"{object_name} wasn't found in {bucket_name}"
+        )
 
 
 @app.get("/bucket/{bucket_name}")
