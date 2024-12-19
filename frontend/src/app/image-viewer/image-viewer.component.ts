@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Injectable } from '@angular/core';
 
 @Component({
   selector: 'app-image-viewer',
@@ -6,6 +7,14 @@ import { Component } from '@angular/core';
   templateUrl: './image-viewer.component.html',
   styleUrl: './image-viewer.component.css'
 })
+
+@Injectable({ providedIn: 'root' })
+export class ConfigService {
+  constructor(private http: HttpClient) {
+    
+  }
+}
+
 export class ImageViewerComponent {
 
 }
