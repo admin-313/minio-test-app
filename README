@@ -1,0 +1,74 @@
+# MinIO Test App
+
+This is a test project designed to integrate various technologies to create a web application. The primary goal is to explore and demonstrate the interoperability of these technologies.
+
+## Technologies Used
+
+- **FastAPI**: A modern, fast (high-performance), web framework for building APIs with Python 3.6+ based on standard Python type hints.
+- **Angular**: A platform for building mobile and desktop web applications using TypeScript/JavaScript and other languages.
+- **MinIO**: A high-performance, S3 compatible object storage system.
+- **Nginx**: A high-performance HTTP server, reverse proxy, and IMAP/POP3 proxy server.
+
+## Purpose
+
+The purpose of this project is to put these technologies together to create a functional web application. This involves setting up a backend with FastAPI, a frontend with Angular, object storage with MinIO, and serving the application using Nginx.
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.6+
+- Node.js and npm
+- Docker (for MinIO and Nginx)
+
+### Installation
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/yourusername/minio-test-app.git
+    cd minio-test-app
+    ```
+
+2. **Backend (FastAPI)**:
+    ```bash
+    cd backend
+    pip install -r requirements.txt
+    uvicorn main:app --reload
+    ```
+
+3. **Frontend (Angular)**:
+    ```bash
+    cd frontend
+    npm install
+    ng serve
+    ```
+
+4. **MinIO**:
+    ```bash
+    docker run -p 9000:9000 -d --name minio \
+      -e "MINIO_ACCESS_KEY=youraccesskey" \
+      -e "MINIO_SECRET_KEY=yoursecretkey" \
+      minio/minio server /data
+    ```
+
+5. **Nginx**:
+    ```bash
+    docker run -p 80:80 -d --name nginx \
+      -v /path/to/nginx.conf:/etc/nginx/nginx.conf:ro \
+      nginx
+    ```
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgements
+
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Angular](https://angular.io/)
+- [MinIO](https://min.io/)
+- [Nginx](https://www.nginx.com/)
