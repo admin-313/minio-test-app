@@ -9,4 +9,20 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'frontend';
+
+  onHomeClick(): void {
+    console.log('Button clicked!')
+  }
+
+  onAboutClick(): void {
+
+  }
+
+  onServicesClick(): void {
+
+  }
+
+  onContactClick(): void {
+
+  }
 }
