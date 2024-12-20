@@ -1,0 +1,40 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-test
+    networks:
+      backend:
+        ipv4_address: 172.28.1.2
+    volumes:
+      - ./minio.conf:/etc/nginx/nginx.conf
+      - ./nginx-ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - minio
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: qwerty123456
+      MINIO_BROWSER_REDIRECT_URL: http://localhost/minio/ui
+    volumes:
+      - ./minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      backend:
+        ipv4_address: 172.28.1.3
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.28.1.0/24"
+
+volumes:
+  minio_data:
+  nginx_ssl:
