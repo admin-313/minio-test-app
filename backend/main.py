@@ -60,6 +60,9 @@ async def read_item(bucket_name: str, object_name: str) -> StreamingResponse:
             status_code=404, detail=f"{object_name} wasn't found in {bucket_name}"
         )
 
+@app.get("/bucket/all")
+async def read_minio() -> list[str]:
+    return [bucket.name for bucket in minio_driver.get_all()]
 
 @app.get("/bucket/{bucket_name}")
 async def read_bucket(bucket_name: str, amount: int = 20) -> list[str | None]:
@@ -76,6 +79,3 @@ async def read_bucket(bucket_name: str, amount: int = 20) -> list[str | None]:
         raise HTTPException(status_code=500)
 
 
-@app.get("/bucket/all")
-async def read_minio() -> list[str]:
-    return [bucket.name for bucket in minio_driver.get_all()]
