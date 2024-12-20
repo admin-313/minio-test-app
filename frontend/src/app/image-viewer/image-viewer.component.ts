@@ -16,5 +16,8 @@ export class ConfigService {
 }
 
 export class ImageViewerComponent {
-
+  onShowAllAvaliableBucketsClick(): void {
+    // make a db call here from what you DIed with @Injectable
+    
+  }
 }
