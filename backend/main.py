@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from minio.datatypes import Object as MinioObject
 from fastapi.middleware.cors import CORSMiddleware
-from db.minio_database_driver_impl import MinioDatabaseDriverImpl
+from images.minio.minio_database_driver_impl import MinioDatabaseDriverImpl
 
 load_dotenv()
 
