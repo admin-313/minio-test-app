@@ -1,7 +1,8 @@
+import random
 from typing import Iterator
 
 from urllib3 import BaseHTTPResponse
-from db.database_driver import DatabaseDriver
+from images.database_driver import DatabaseDriver
 from minio import Minio
 from minio.datatypes import Bucket
 from minio.datatypes import Object as MinioObject
@@ -56,3 +57,17 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
         self, bucket_name: str, object_name: str, object_content: bytes
     ) -> None:
         pass
+
+    def get_random_object(self, bucket_name: str) -> MinioObject:
+        code: bool
+        all_objects_in_bucket: list[MinioObject]
+
+        code, all_objects_in_bucket = self.get_all_objects()
+
+        if code and all_objects_in_bucket:
+            return random.choice(all_objects_in_bucket)
+        
+        elif code and not all_objects_in_bucket:
+            raise ValueError("Bucket doesn't have any content to choose from")
+        else:
+            pass

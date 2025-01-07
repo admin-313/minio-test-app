@@ -1,0 +1,2 @@
+class EmptyBucketException(Exception):
+    pass
