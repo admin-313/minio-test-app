@@ -15,11 +15,15 @@ class DatabaseDriver(ABC):
     @abstractmethod
     def get_all_objects(
         self, bucket_name: str, amount: int
-    ) -> tuple[bool, list[minio.datatypes.Object] | str]:
+    ) -> tuple[bool, list[object] | str]:
         pass
 
     @abstractmethod
     def put_object(
         self, bucket_name: str, object_name: str, object_content: bytes
     ) -> None:
+        pass
+    
+    @abstractmethod
+    def get_random_object(self) -> object:
         pass
