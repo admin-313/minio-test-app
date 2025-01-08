@@ -59,15 +59,15 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
         pass
 
     def get_random_object(self, bucket_name: str) -> MinioObject:
-        code: bool
+        is_responce: bool
         all_objects_in_bucket: list[MinioObject]
 
-        code, all_objects_in_bucket = self.get_all_objects()
+        is_responce, all_objects_in_bucket = self.get_all_objects()
 
-        if code and all_objects_in_bucket:
+        if is_responce and all_objects_in_bucket:
             return random.choice(all_objects_in_bucket)
         
-        elif code and not all_objects_in_bucket:
+        elif is_responce and not all_objects_in_bucket:
             raise ValueError("Bucket doesn't have any content to choose from")
         else:
             pass
