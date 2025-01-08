@@ -1,4 +1,5 @@
 import os
+import uvicorn
 
 from minio import Minio
 from dotenv import load_dotenv
@@ -8,6 +9,7 @@ from fastapi.responses import StreamingResponse
 from minio.datatypes import Object as MinioObject
 from fastapi.middleware.cors import CORSMiddleware
 from images.minio.minio_database_driver_impl import MinioDatabaseDriverImpl
+from images.exceptions import EmptyBucketException, BucketDoesNotExistException
 
 load_dotenv()
 
@@ -46,6 +48,23 @@ MINIO_DB = Minio(
 minio_driver = MinioDatabaseDriverImpl(MINIO_DB)
 
 
+@app.get("/bucket/{bucket_name}/random")
+async def read_random_item(bucket_name: str) -> StreamingResponse:
+    try:
+        pass
+    except EmptyBucketException:
+        raise HTTPException(
+            status_code=404, detail="The bucket you have requested seems to be empty"
+        )
+
+    except BucketDoesNotExistException:
+        raise HTTPException(
+            status_code=404, detail="The bucket you have requested doesn't exist"
+        )
+    except:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
 @app.get("/bucket/{bucket_name}/{object_name}")
 async def read_item(bucket_name: str, object_name: str) -> StreamingResponse:
     file: BaseHTTPResponse | None = minio_driver.get_object(bucket_name, object_name)
@@ -69,14 +88,15 @@ async def read_minio() -> list[str]:
 
 @app.get("/bucket/{bucket_name}")
 async def read_bucket(bucket_name: str, amount: int = 20) -> list[str | None]:
-    bucket_minio_objects: tuple[bool, list[MinioObject] | str] = (
-        minio_driver.get_all_objects(bucket_name=bucket_name, amount=amount)
-    )
+    try: 
+        bucket_minio_objects: list[MinioObject] = (
+            minio_driver.get_all_objects(bucket_name=bucket_name, amount=amount)
+        )
+        return [filename.object_name for filename in bucket_minio_objects]
+    
+    except BucketDoesNotExistException:
+        raise HTTPException(status_code=404, detail="Specified bucket does not exist")
 
-    if not bucket_minio_objects[0]:
-        raise HTTPException(status_code=404, detail=bucket_minio_objects[1])
 
-    elif bucket_minio_objects[0] and isinstance(bucket_minio_objects[1], list):
-        return [minio_object.object_name for minio_object in bucket_minio_objects[1]]
-    else:
-        raise HTTPException(status_code=500)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

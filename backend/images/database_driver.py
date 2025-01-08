@@ -13,7 +13,7 @@ class DatabaseDriver(ABC):
     @abstractmethod
     def get_all_objects(
         self, bucket_name: str, amount: int
-    ) -> tuple[bool, list[object] | str]:
+    ) -> list[Any]:
         pass
 
     @abstractmethod
@@ -23,5 +23,5 @@ class DatabaseDriver(ABC):
         pass
     
     @abstractmethod
-    def get_random_object(self) -> object:
+    def get_random_object(self, bucket_name: str) -> Any:
         pass
