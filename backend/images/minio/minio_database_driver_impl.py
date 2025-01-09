@@ -39,30 +39,6 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
         else:
             raise BucketDoesNotExistException()
 
-    # def get_all_objects(
-    #     self, bucket_name: str, amount: int
-    # ) -> tuple[bool, list[MinioObject] | str]:
-    #     # TODO Rewrite this method to throw an exception if the bucket does not exist
-    #     if amount > 100:
-    #         amount = 100
-
-    #     if self._minio_db.bucket_exists(bucket_name):
-    #         minio_objects: list[MinioObject] = []
-    #         minio_objects_iter: Iterator[MinioObject] = self._minio_db.list_objects(
-    #             bucket_name
-    #         )
-
-    #         ticker: int = 0
-    #         for minio_object in minio_objects_iter:
-    #             if ticker >= amount:
-    #                 break
-    #             minio_objects.append(minio_object)
-    #             ticker += 1
-
-    #         return True, minio_objects
-    #     else:
-    #         return False, f"Bucket {bucket_name} doesn't exist"
-
     def get_object(self, bucket_name: str, object_name: str) -> BaseHTTPResponse | None:
         responce = None
 
@@ -83,6 +59,7 @@ class MinioDatabaseDriverImpl(DatabaseDriver):
 
     def get_random_object(self, bucket_name: str) -> BaseHTTPResponse:
         pass
+
     #     is_responce: bool
     #     all_objects_in_bucket: list[MinioObject] | str
 
